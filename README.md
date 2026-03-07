@@ -1,4 +1,4 @@
-![Build Status](https://github.com/oyvey1984/job4j_social_media_api/tree/main/.github/workflows/badge.svg)
+[![Java CI with Maven](https://github.com/oyvey1984/job4j_social_media_api/actions/workflows/maven.yml/badge.svg?branch=main)](https://github.com/oyvey1984/job4j_social_media_api/actions/workflows/maven.yml)
 
 # Social Media API
 
