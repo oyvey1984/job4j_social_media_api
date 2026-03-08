@@ -1,4 +1,4 @@
-package ru.job4j.job4j_social_media_api;
+package ru.job4j.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package ru.job4j.job4j_social_media_api;
+package ru.job4j.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
