@@ -2,7 +2,7 @@
 
 -- changeset oyvey1984:6
 
-CREATE TABLE messages (
+CREATE TABLE IF NOT EXISTS messages (
     id SERIAL PRIMARY KEY,
     sender_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     receiver_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,

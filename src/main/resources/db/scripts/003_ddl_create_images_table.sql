@@ -2,7 +2,7 @@
 
 -- changeset oyvey1984:3
 
-CREATE TABLE images (
+CREATE TABLE IF NOT EXISTS images (
     id SERIAL PRIMARY KEY,
     post_id INT NOT NULL REFERENCES posts(id) ON DELETE CASCADE,
     file_name VARCHAR(255) NOT NULL,

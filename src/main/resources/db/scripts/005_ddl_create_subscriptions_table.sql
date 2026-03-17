@@ -2,7 +2,7 @@
 
 -- changeset oyvey1984:5
 
-CREATE TABLE subscriptions (
+CREATE TABLE IF NOT EXISTS subscriptions (
     id SERIAL PRIMARY KEY,
     follower_id INT  NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     following_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,

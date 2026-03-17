@@ -2,7 +2,7 @@
 
 -- changeset oyvey1984:4
 
-CREATE TABLE friend_requests (
+CREATE TABLE IF NOT EXISTS friend_requests (
     id SERIAL PRIMARY KEY,
     from_user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     to_user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,

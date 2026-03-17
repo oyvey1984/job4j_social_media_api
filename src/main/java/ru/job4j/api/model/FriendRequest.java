@@ -22,7 +22,7 @@ public class FriendRequest {
     @ManyToOne
     private User toUser;
 
-    private String status; // PENDING, ACCEPTED, REJECTED
+    private String status;
 
     private Instant createdAt;
     private Instant updatedAt;

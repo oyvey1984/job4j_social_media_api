@@ -10,10 +10,10 @@
 		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
     <include file="scripts/001_ddl_create_users_table.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/001_ddl_create_posts_table.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/001_ddl_create_images_table.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/001_ddl_create_friend_requests_table.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/001_ddl_create_subscriptions_table.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/001_ddl_create_messages_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/002_ddl_create_posts_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/003_ddl_create_images_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/004_ddl_create_friend_requests_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/005_ddl_create_subscriptions_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/006_ddl_create_messages_table.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
