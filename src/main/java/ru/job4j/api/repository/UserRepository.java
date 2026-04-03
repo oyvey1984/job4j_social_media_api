@@ -1,15 +1,16 @@
 package ru.job4j.api.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.api.model.User;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
     @Query("""
             SELECT u FROM User u
             WHERE u.username = :username AND u.passwordHash = :passwordHash
@@ -34,4 +35,19 @@ public interface UserRepository extends CrudRepository<User, Long> {
             WHERE fr.fromUser.id = :userId AND fr.status = 'ACCEPTED'
             """)
     List<User> findFriendsByUserId(@Param("userId") Long userId);
+
+    @Transactional
+    @Modifying
+    @Query("""
+            UPDATE User u
+            SET u.username = :#{#user.username},
+            u.email = :#{#user.email}
+            where u.id = :#{#user.id}
+            """)
+    int update(@Param("user") User user);
+
+    @Transactional
+    @Modifying
+    @Query("delete from User u where u.id=:pId")
+    int delete(@Param("pId") Long id);
 }

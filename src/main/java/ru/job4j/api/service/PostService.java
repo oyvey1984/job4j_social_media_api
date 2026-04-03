@@ -10,6 +10,7 @@ import ru.job4j.api.repository.PostRepository;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -20,6 +21,53 @@ public class PostService {
     public PostService(PostRepository postRepository, ImageRepository imageRepository) {
         this.postRepository = postRepository;
         this.imageRepository = imageRepository;
+    }
+
+    public Post save(Post post) {
+        return postRepository.save(post);
+    }
+
+    public boolean update(Post post) {
+        String content = post.getContent();
+        String title = post.getTitle();
+        Long id = post.getId();
+        return postRepository.updateTitleAndContentByPostId(content, title, id) > 0L;
+    }
+
+    public boolean partialUpdate(Post post) {
+        if (post.getId() == null) {
+            return false;
+        }
+
+        Optional<Post> optionalPost = postRepository.findById(post.getId());
+        if (optionalPost.isEmpty()) {
+            return false;
+        }
+
+        Post existing = optionalPost.get();
+
+        if (post.getTitle() != null) {
+            existing.setTitle(post.getTitle());
+        }
+
+        if (post.getContent() != null) {
+            existing.setContent(post.getContent());
+        }
+
+        postRepository.save(existing);
+        return true;
+    }
+
+    public List<Post> findAll() {
+        return postRepository.findAll();
+    }
+
+    public Optional<Post> findById(Long id) {
+        return postRepository.findById(id);
+    }
+
+    public boolean deleteById(Long id) {
+        return postRepository.deleteByPostId(id) > 0;
     }
 
     @Transactional
