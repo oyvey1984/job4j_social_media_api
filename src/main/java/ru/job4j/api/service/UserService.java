@@ -1,6 +1,7 @@
 package ru.job4j.api.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import ru.job4j.api.model.User;
 import ru.job4j.api.repository.UserRepository;
@@ -14,6 +15,11 @@ public class UserService {
     private final UserRepository repository;
 
     public User save(User user) {
+        if (repository.existsByEmail(user.getEmail())) {
+            throw new DataIntegrityViolationException(
+                    "Email '" + user.getEmail() + "' already exist"
+            );
+        }
         return repository.save(user);
     }
 
