@@ -15,5 +15,6 @@
     <include file="scripts/004_ddl_create_friend_requests_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/005_ddl_create_subscriptions_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/006_ddl_create_messages_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/007_ddl_add_unique_constraint_to_email.sql" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

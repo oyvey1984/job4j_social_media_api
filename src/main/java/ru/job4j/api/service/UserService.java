@@ -15,11 +15,6 @@ public class UserService {
     private final UserRepository repository;
 
     public User save(User user) {
-        if (repository.existsByEmail(user.getEmail())) {
-            throw new DataIntegrityViolationException(
-                    "Email '" + user.getEmail() + "' already exist"
-            );
-        }
         return repository.save(user);
     }
 

@@ -31,7 +31,8 @@ public class GlobalExceptionHandler {
         details.put("timestamp", String.valueOf(LocalDateTime.now()));
         details.put("path", request.getRequestURI());
         response.setStatus(HttpStatus.CONFLICT.value());
-        response.setContentType("application/json, charset=utf-8");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
         response.getWriter().write(new ObjectMapper().writeValueAsString(details));
         log.error(e.getLocalizedMessage());
     }
