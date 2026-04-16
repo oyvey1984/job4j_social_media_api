@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.job4j.api.dto.UsersPostsDTO;
 import ru.job4j.api.model.Post;
 import ru.job4j.api.service.PostService;
 
@@ -83,6 +84,16 @@ public class PostController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/users-with-posts")
+    public ResponseEntity<List<UsersPostsDTO>> getUsersWithPosts(@RequestBody List<Long> userIds) {
+        if (userIds == null || userIds.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        List<UsersPostsDTO> result = postService.getUsersWithPosts(userIds);
+        return ResponseEntity.ok(result);
     }
 }
 
