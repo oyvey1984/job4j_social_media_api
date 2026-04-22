@@ -9,6 +9,7 @@ import ru.job4j.api.model.Post;
 @Mapper(componentModel = "spring")
 public interface PostMapper {
     @Mapping(target = "postId", source = "id")
+    @Mapping(target = "userId", source = "user.id")
     @Mapping(target = "userName", source = "user.username")
     @Mapping(target = "createdAt", source = "createdAt")
     PostDTO toDTO(Post post);

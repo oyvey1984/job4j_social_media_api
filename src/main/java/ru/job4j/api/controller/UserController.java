@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.job4j.api.model.User;
+import ru.job4j.api.dto.UserDTO;
 import ru.job4j.api.service.UserService;
 
 import java.net.URI;
@@ -26,13 +26,13 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<User>> getAll() {
-        List<User> users = userService.findAll();
+    public ResponseEntity<List<UserDTO>> getAll() {
+        List<UserDTO> users = userService.findAll();
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> get(@PathVariable("userId")
+    public ResponseEntity<UserDTO> get(@PathVariable("userId")
                                     @NotNull
                                     @Min(value = 1, message = "номер ресурса должен быть 1 и более")
                                     Long userId) {
@@ -42,33 +42,33 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> save(@RequestBody @Valid User user) {
-        userService.save(user);
+    public ResponseEntity<UserDTO> save(@RequestBody @Valid UserDTO userDTO) {
+        UserDTO savedUser = userService.save(userDTO);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(user.getId())
+                .buildAndExpand(savedUser.getId())
                 .toUri();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .location(uri)
-                .body(user);
+                .body(savedUser);
     }
 
     @PutMapping
-    public ResponseEntity<Void> update(@RequestBody @Valid User user) {
-        if (user.getId() == null) {
+    public ResponseEntity<Void> update(@RequestBody @Valid UserDTO userDTO) {
+        if (userDTO.getId() == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        if (userService.update(user)) {
+        if (userService.update(userDTO)) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
 
     @PatchMapping
-    public ResponseEntity<Void> change(@RequestBody @Valid User user) {
-        if (userService.partialUpdate(user)) {
+    public ResponseEntity<Void> change(@RequestBody @Valid UserDTO userDTO) {
+        if (userService.partialUpdate(userDTO)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();

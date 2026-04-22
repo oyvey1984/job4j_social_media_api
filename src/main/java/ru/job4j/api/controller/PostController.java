@@ -10,8 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.job4j.api.dto.PostDTO;
 import ru.job4j.api.dto.UsersPostsDTO;
-import ru.job4j.api.model.Post;
 import ru.job4j.api.service.PostService;
 
 import java.net.URI;
@@ -27,13 +27,13 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    public ResponseEntity<List<Post>> getAll() {
-        List<Post> posts = postService.findAll();
+    public ResponseEntity<List<PostDTO>> getAll() {
+        List<PostDTO> posts = postService.findAll();
         return ResponseEntity.ok(posts);
     }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<Post> get(@PathVariable("postId")
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostDTO> get(@PathVariable("postId")
                                     @NotNull
                                     @Min(value = 1, message = "номер ресурса должен быть 1 и более")
                                     Long postId) {
@@ -43,33 +43,33 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<Post> save(@RequestBody @Valid Post post) {
-        postService.save(post);
+    public ResponseEntity<PostDTO> save(@RequestBody @Valid PostDTO postDTO) {
+        PostDTO savedPost = postService.save(postDTO);
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(post.getId())
+                .buildAndExpand(savedPost.getPostId())
                 .toUri();
         return ResponseEntity.status(HttpStatus.CREATED)
                 .location(uri)
-                .body(post);
+                .body(savedPost);
     }
 
     @PutMapping
-    public ResponseEntity<Void> update(@RequestBody @Valid Post post) {
-        if (post.getId() == null) {
+    public ResponseEntity<Void> update(@RequestBody @Valid PostDTO postDTO) {
+        if (postDTO.getPostId() == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        if (postService.update(post)) {
+        if (postService.update(postDTO)) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
 
     @PatchMapping
-    public ResponseEntity<Void> change(@RequestBody @Valid Post post) {
-        if (postService.partialUpdate(post)) {
+    public ResponseEntity<Void> change(@RequestBody @Valid PostDTO postDTO) {
+        if (postService.partialUpdate(postDTO)) {
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
@@ -79,8 +79,8 @@ public class PostController {
     public ResponseEntity<Void> removeById(@PathVariable("postId")
                                            @NotNull
                                            @Min(value = 1, message = "номер ресурса должен быть 1 и более")
-                                           Long userId) {
-        if (postService.deleteById(userId)) {
+                                           Long postId) {
+        if (postService.deleteById(postId)) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();

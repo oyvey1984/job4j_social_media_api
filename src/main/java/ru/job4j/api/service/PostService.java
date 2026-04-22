@@ -2,7 +2,9 @@ package ru.job4j.api.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.job4j.api.dto.PostDTO;
 import ru.job4j.api.dto.UsersPostsDTO;
+import ru.job4j.api.mappers.PostMapper;
 import ru.job4j.api.mappers.UserPostsDTOMapper;
 import ru.job4j.api.model.Image;
 import ru.job4j.api.model.Post;
@@ -23,56 +25,63 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final ImageRepository imageRepository;
+    private final PostMapper postMapper;
     private final UserPostsDTOMapper userPostsDTOMapper;
 
-    public PostService(PostRepository postRepository, UserRepository userRepository, ImageRepository imageRepository, UserPostsDTOMapper userPostsDTOMapper) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, ImageRepository imageRepository, PostMapper postMapper, UserPostsDTOMapper userPostsDTOMapper) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.imageRepository = imageRepository;
+        this.postMapper = postMapper;
         this.userPostsDTOMapper = userPostsDTOMapper;
     }
 
-    public Post save(Post post) {
-        return postRepository.save(post);
+    public PostDTO save(PostDTO postDTO) {
+        Post post = postMapper.toEntity(postDTO);
+        Post savedPost = postRepository.save(post);
+        return postMapper.toDTO(savedPost);
     }
 
-    public boolean update(Post post) {
-        String content = post.getContent();
-        String title = post.getTitle();
-        Long id = post.getId();
-        return postRepository.updateTitleAndContentByPostId(content, title, id) > 0L;
+    public boolean update(PostDTO postDTO) {
+        String content = postDTO.getContent();
+        String title = postDTO.getTitle();
+        Long id = postDTO.getPostId();
+        return postRepository.updateTitleAndContentByPostId(title, content, id) > 0L;
     }
 
-    public boolean partialUpdate(Post post) {
-        if (post.getId() == null) {
+    public boolean partialUpdate(PostDTO postDTO) {
+        if (postDTO.getPostId() == null) {
             return false;
         }
 
-        Optional<Post> optionalPost = postRepository.findById(post.getId());
+        Optional<Post> optionalPost = postRepository.findById(postDTO.getPostId());
         if (optionalPost.isEmpty()) {
             return false;
         }
 
         Post existing = optionalPost.get();
 
-        if (post.getTitle() != null) {
-            existing.setTitle(post.getTitle());
+        if (postDTO.getTitle() != null) {
+            existing.setTitle(postDTO.getTitle());
         }
 
-        if (post.getContent() != null) {
-            existing.setContent(post.getContent());
+        if (postDTO.getContent() != null) {
+            existing.setContent(postDTO.getContent());
         }
 
         postRepository.save(existing);
         return true;
     }
 
-    public List<Post> findAll() {
-        return postRepository.findAll();
+    public List<PostDTO> findAll() {
+        List<Post> posts = postRepository.findAll();
+        return posts.stream().map(postMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
-    public Optional<Post> findById(Long id) {
-        return postRepository.findById(id);
+    public Optional<PostDTO> findById(Long id) {
+        return postRepository.findById(id)
+                .map(postMapper::toDTO);
     }
 
     public boolean deleteById(Long id) {
